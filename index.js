@@ -30,7 +30,7 @@ async function download(url,res){
         console.log("title",info.videoDetails.title);
     })
 
-    video.pipe(fs.createWriteStream(output));
+    video.pipe(fs.createWriteStream(info.videoDetails.title+".mp4"));
     video.once("response",()=>{
         starttime=Date.now();
 
