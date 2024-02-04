@@ -24,13 +24,19 @@ async function download(url,res){
     let videoId=ytdl.getURLVideoID(url);
     let video=ytdl(url);
     let output=path.resolve(__dirname,"video"+n+".mp4");
-
+    let title;
     //get info
     ytdl.getBasicInfo(videoId).then(info=>{
+        title=info.videoDetails.title;
         console.log("title",info.videoDetails.title);
     })
 
-    video.pipe(fs.createWriteStream(info.videoDetails.title+".mp4"));
+
+    //To trigger a file download in the browser rather than saving it to the local path, you need to set appropriate headers in the response.
+    res.setHeader('Content-Disposition', 'attachment; filename="video.mp4"');
+    res.setHeader('Content-Type', 'video/mp4');
+    video.pipe(res);
+
     video.once("response",()=>{
         starttime=Date.now();
 
